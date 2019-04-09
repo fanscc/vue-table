@@ -90,21 +90,35 @@
           >awesome-vue</a
         >
       </li>
+      <li @click="mocklogin">
+        mock接口模拟
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { getLuckyDrawData } from '@/api/api'
 export default {
   name: "HelloWorld",
   props: {
     msg: String
+  },
+  methods: {
+    mocklogin() {
+      getLuckyDrawData().then(res => {
+        console.log(res)
+      })
+    }
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+h1 {
+  font-size: 16px;
+}
 h3 {
   margin: 40px 0 0;
 }

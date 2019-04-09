@@ -1,0 +1,64 @@
+{
+  "model": [
+    {
+      "supplierId": 1003399,
+      "supplierName": "乾贝"
+    },
+    {
+      "supplierId": 1,
+      "supplierName": "有机厨房有限公司"
+    },
+    {
+      "supplierId": 2,
+      "supplierName": "肯德基乐活有限公司"
+    },
+    {
+      "supplierId": 202856,
+      "supplierName": "和昌"
+    },
+    {
+      "supplierId": 3,
+      "supplierName": "hello10016"
+    },
+    {
+      "supplierId": 4,
+      "supplierName": "汪汪"
+    },
+    {
+      "supplierId": 5,
+      "supplierName": "汪汪"
+    },
+    {
+      "supplierId": 2000567,
+      "supplierName": "原厂特卖价供应商"
+    },
+    {
+      "supplierId": 2000571,
+      "supplierName": "原厂特卖-特斯拉"
+    },
+    {
+      "supplierId": 6,
+      "supplierName": "覃大龙"
+    },
+    {
+      "supplierId": 7,
+      "supplierName": "龙哥"
+    },
+    {
+      "supplierId": 18615,
+      "supplierName": "宏伟"
+    },
+    {
+      "supplierId": 2001503,
+      "supplierName": "使用erp供应商"
+    }
+  ],
+  "success": true,
+  "errorCode": 0,
+  "errorMsg": null,
+  "notEmpty": true,
+  "code": 200,
+  "unSuccess": false,
+  "msg": null,
+  "empty": false
+}

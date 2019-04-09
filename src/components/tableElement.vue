@@ -1,0 +1,107 @@
+<template>
+  <div class="tableEment">
+    <slot name="header"></slot>
+    <el-table
+      ref="table"
+      :data="realTableData"
+      border
+      style="overflow:auto;margin-bottom: 20px;"
+      :cell-style="bodyStyle"
+      :header-cell-style="headerStyle"
+    >
+      <report-column
+        v-for="(column, $index) in realTableColumns"
+        :key="$index"
+        v-on="$listeners"
+        v-bind="column"
+      ></report-column>
+    </el-table>
+    <el-pagination
+      style="text-align:right;"
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[20, 50, 100, 200]"
+      :page-size="20"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="400"
+    >
+    </el-pagination>
+    <slot name="footer"></slot>
+  </div>
+</template>
+<script>
+import reportColumn from "./reportColumn.vue";
+// import _ from 'lodash'
+/* eslint-disable */
+export default {
+    name: 'report-table',
+    props: {
+      realTableData: {
+          type: Array
+      },
+      realTableColumns: {
+        type: Array
+      },
+      currentPage: {
+        type: Number
+      }
+    },
+    components: {
+      reportColumn
+    },
+    data() {
+      return {
+        bodyStyle: {
+          'font-size': "12px",
+          'padding': '0',
+          'height': '40px',
+        },
+        headerStyle: {
+          'font-size': '12px',
+          'font-weight': 'blod',
+          'color': 'rgba(49, 65, 86, 0.82)',
+          'padding': '0',
+          'height': '40px'
+        },
+      }
+    },
+    watch: {
+
+    },
+    computed: {
+
+    },
+    created() {
+
+    },
+    mounted() {
+
+    },
+    deactivated() {
+    },
+    activated() {
+
+    },
+    methods: {
+      handleSizeChange(val) {
+         console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.$emit('childmethods', 'CurrentChange', val);
+      }
+    }
+  }
+</script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.tableEment {
+  display: flex;
+  flex-direction: column;
+  & /deep/ .el-table {
+    width: 100%;
+    flex: 1;
+  }
+}
+</style>
