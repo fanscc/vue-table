@@ -1,0 +1,8 @@
+
+[auth]
+token=57f23b1aa6c24c7ea1e7266864ae64fb3e07a260bcd94ac4a5fb12e6d7236c56
+[defaults]   
+url=https://sentry.io/
+org=fanscc
+project=vue-table
+
