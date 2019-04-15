@@ -114,6 +114,7 @@
         })
         if (guanliancompent) {
             guanliancompent.defaultValue = ''
+            guanliancompent.dataOptions = []
             let params = this.name
             guanliancompent.getData({params: val})
         }
