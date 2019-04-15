@@ -8,6 +8,7 @@
       style="overflow:auto;margin-bottom: 20px;"
       :cell-style="bodyStyle"
       :header-cell-style="headerStyle"
+      @selection-change="handleCurrentChange"
     >
       <report-column
         v-for="(column, $index) in realTableColumns"
@@ -65,6 +66,7 @@ export default {
           'padding': '0',
           'height': '40px'
         },
+        multipleSelection: []
       }
     },
     watch: {
@@ -91,6 +93,10 @@ export default {
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.$emit('childmethods', 'methodCurrentChange', val);
+      },
+      handleCurrentChange(val) {
+        this.multipleSelection = val;
+        console.log(this.multipleSelection)
       }
     }
   }

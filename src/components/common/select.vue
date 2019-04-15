@@ -64,8 +64,8 @@
         type: Boolean,
         default: false
       },
-      target: {
-        type: Array
+      name: {
+        type: String
       },
       staticParams: {
         type: Object,
@@ -91,7 +91,6 @@
     data() {
       return {
         defaultValue: this.multiple ? [] : '',
-        params: {},
         loading: false,
         dataOptions: [],
         isFirst: 0
@@ -107,29 +106,34 @@
       },
       defaultValue(val) {
         this.$emit('input', val)
-      },
-      params: {
-        handler(val) {
-          if (val) {
-            if(Object.values(val).length > 0 && Object.values(val)[0]) {
-              this.getData()
+        let guanliancompent = ''
+        this.$parent.$children.map((item) => {
+            if (item.$attrs.parent === this.name) {
+                guanliancompent = item
             }
-          }
-        },
-        deep: true
+        })
+        if (guanliancompent) {
+            guanliancompent.defaultValue = ''
+            let params = this.name
+            guanliancompent.getData({params: val})
+        }
       }
     },
     created() {
       this.getData()
     },
     methods: {
-      getData() {
+      getData(val = {}) {
+        if (this.$attrs.parent && !val.params) {
+            return
+        }
         let endParams = {}
         if (this.needQuery) {
-          endParams = Object.assign({}, this.staticParams, this.params)
+          endParams = Object.assign({}, this.staticParams, val)
         } else {
-          endParams = Object.assign({}, this.staticParams, this.params, this.$route.query)
-        }  
+          endParams = Object.assign({}, this.staticParams, val, this.$route.query)
+        } 
+        console.log(endParams)
         this.$http(this.path, endParams).then(res => {
             this.dealData(res.model);
         })     

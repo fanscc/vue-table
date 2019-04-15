@@ -38,6 +38,19 @@ export const ckytesttable = {
           label: "supplierName",
           value: "supplierId"
         }
+      },
+      {
+        inputModel: "fsSelect",
+        isHidden: false,
+        name: "type1",
+        parent: "type",
+        path: "/cky/getSuppliersMap",
+        placeholder: "请选择产品品牌",
+        title: "产品子品牌2",
+        paramsMaping: {
+          label: "supplierName",
+          value: "supplierId"
+        }
       }
     ],
     buttons: [{ style: "primary", type: "inquire" }, { type: "export" }]

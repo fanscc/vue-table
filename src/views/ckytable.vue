@@ -1,14 +1,14 @@
 <template>
   <div class="home">
-    <div>table</div>
     <div class="reportParams">
       <reportParams
+        ref="queryButton"
         :froms="ckytesttable.froms"
         @buttomChild="buttomChild"
-        ref="queryButton"
       ></reportParams>
     </div>
     <tableElement
+      ref="tableConten"
       :realTableData="orderDetailVOList"
       :realTableColumns="ckytesttable.ckytestColumns"
       @childmethods="childmethods"
@@ -83,6 +83,16 @@ export default {
       console.log(onflag);
       if (onflag) {
         this.getDatas(1, val);
+      }
+    },
+    methodexport(val) {
+      // 导出如果没有勾选则导出查询内容
+      let multipleSelection = this.$refs.tableConten.multipleSelection;
+      console.log(multipleSelection, val);
+      if (multipleSelection.length === 0) {
+        alert(`导出查询条件为${JSON.stringify(val)}的数据`);
+      } else {
+        alert(`导出勾选的数据`);
       }
     },
     methodrouter(val, url) {

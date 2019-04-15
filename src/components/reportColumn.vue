@@ -12,6 +12,18 @@
   </el-table-column>
 
   <el-table-column
+    :type="type"
+    :label="title"
+    :prop="name"
+    :align="align"
+    :selectable="selectAble.bind(this)"
+    :width="80"
+    :reserve-selection="true"
+    v-else-if="type === 'selection'"
+  >
+  </el-table-column>
+
+  <el-table-column
     v-else-if="type === 'formatter'"
     :label="title"
     :prop="name"
@@ -82,6 +94,9 @@ export default {
     buttons: {
       type: Array,
       defalut: []
+    },
+    selectable: {
+      type: String
     }
   },
   data() {
@@ -114,6 +129,14 @@ export default {
     },
     handleButton(idx, itemRow, button) {
       this.$emit("childmethods", button, itemRow);
+    },
+    selectAble(row, index) {
+      if (this.selectable) {
+        const Fn = Function;
+        return new Fn("return " + this.selectable)()(row, index);
+      } else {
+        return true;
+      }
     }
   }
 };
