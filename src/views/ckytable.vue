@@ -2,11 +2,15 @@
   <div class="home">
     <div>table</div>
     <div class="reportParams">
-      <reportParams :form="form"></reportParams>
+      <reportParams
+        :froms="ckytesttable.froms"
+        @buttomChild="buttomChild"
+        ref="queryButton"
+      ></reportParams>
     </div>
     <tableElement
       :realTableData="orderDetailVOList"
-      :realTableColumns="returnGoods"
+      :realTableColumns="ckytesttable.ckytestColumns"
       @childmethods="childmethods"
     ></tableElement>
   </div>
@@ -15,13 +19,13 @@
 <script>
 import reportParams from "@/components/reportParams.vue";
 import tableElement from "@/components/tableElement.vue";
-import { ckytestColumns } from "@/assets/tableData";
+import { ckytesttable } from "@/assets/tableData";
 export default {
   name: "ckytable",
   data() {
     return {
       orderDetailVOList: [],
-      returnGoods: ckytestColumns,
+      ckytesttable: ckytesttable,
       getDataPath: "/api-hxdgame/api/hxdgame/2220/v1/luckyDraw",
       pageNo: 1,
       form: {
@@ -43,20 +47,26 @@ export default {
     this.getDatas();
   },
   methods: {
-    getDatas(pageNo = 1) {
+    getDatas(pageNo = 1, val) {
       this.pageNo = pageNo;
       let params = {
         pageNo: pageNo,
         pageSize: 20
       };
+      if (val) {
+        params = Object.assign({}, params, val);
+      }
+      console.log(params);
       this.$http(this.getDataPath, params).then(res => {
-        debugger;
         this.orderDetailVOList = res.data.data;
         console.log(res.data.data);
       });
     },
+    buttomChild(type, val) {
+      this[type] && this[type](val);
+    },
     childmethods(type, val) {
-      if (typeof type === "string") {
+      if (type === "methodCurrentChange") {
         this.getDatas(val);
       } else {
         let ntype = type.event.type;
@@ -64,8 +74,15 @@ export default {
         type.event.params.map(o => {
           params[o] = val[o];
         });
-        this["method" + ntype] &&
-          this["method" + ntype](params, type.event.url);
+        this[ntype] && this[ntype](params, type.event.url);
+      }
+    },
+    methodinquire(val) {
+      debugger;
+      let onflag = this.$refs.queryButton.efficacy();
+      console.log(onflag);
+      if (onflag) {
+        this.getDatas(1, val);
       }
     },
     methodrouter(val, url) {

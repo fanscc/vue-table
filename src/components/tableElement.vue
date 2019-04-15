@@ -90,7 +90,7 @@ export default {
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        this.$emit('childmethods', 'CurrentChange', val);
+        this.$emit('childmethods', 'methodCurrentChange', val);
       }
     }
   }
