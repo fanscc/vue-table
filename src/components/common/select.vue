@@ -48,9 +48,11 @@
       disabled: {
         type: Boolean
       },
-      needQuery: Boolean | undefined | String,
       isEdit: Boolean | undefined | String,
       value: {
+        type: String | Array
+      },
+      defaultVal: {
         type: String | Array
       },
       multiple: {
@@ -93,51 +95,49 @@
         defaultValue: this.multiple ? [] : '',
         loading: false,
         dataOptions: [],
-        isFirst: 0
+        promiseResolve: null
       }
     },
     watch: {
       value: {
         handler(val) {
-          this.defaultValue = val
+          this.defaultValue = val? val : this.multiple? []: ''
+          console.log(this.value);
         },
         deep: true,
         immediate: true
       },
       defaultValue(val) {
         this.$emit('input', val)
-        let guanliancompent = ''
-        this.$parent.$children.map((item) => {
-            if (item.$attrs.parent === this.name) {
-                guanliancompent = item
-            }
-        })
-        if (guanliancompent) {
-            guanliancompent.defaultValue = ''
-            guanliancompent.dataOptions = []
-            let params = this.name
-            guanliancompent.getData({params: val})
-        }
+        this.clearChild(val)
       }
     },
     created() {
-      this.getData()
+      this.getData().then(res => {
+        if (this.defaultVal) {
+          this.dataOptions.map((item,index) => {
+            if (item.label === this.defaultVal) {
+              this.defaultValue = this.defaultVal
+            }
+          })
+        }
+      })
     },
     methods: {
       getData(val = {}) {
         if (this.$attrs.parent && !val.params) {
-            return
+            return new Promise((resolve, reject) => {
+              resolve()
+            })
         }
-        let endParams = {}
-        if (this.needQuery) {
-          endParams = Object.assign({}, this.staticParams, val)
-        } else {
-          endParams = Object.assign({}, this.staticParams, val, this.$route.query)
-        } 
+        let endParams = Object.assign({}, this.staticParams, val)
         console.log(endParams)
-        this.$http(this.path, endParams).then(res => {
+        return new Promise((resolve, reject) => {
+          this.$http(this.path, endParams).then(res => {
+            this.promiseResolve = resolve;
             this.dealData(res.model);
-        })     
+          })    
+        })  
       },
       dealData(data) {
         data.map((item) => {
@@ -145,18 +145,21 @@
           item['value'] = item[this.paramsMaping['value']]
         })
         this.dataOptions = data
-        // 当父级选框重新选择时，清空子级选框的值
-        if (this.target && this.target.length > 0) {
-        } else {
-          if (this.isEdit === true) {
-            if (!this.isFirst) {
-              this.isFirst = 1
-              return false
+        this.promiseResolve();
+      },
+      // 城市联动的更改父级的时候清空子级
+      clearChild(val) {
+        let guanliancompent = ''
+        this.$parent.$children.map((item) => {
+            if (item.$attrs.parent === this.name) {
+                guanliancompent = item
             }
-          }
-          if (this.defaultValue) {
-            this.defaultValue = this.multiple ? [] : ''  
-          }
+        })
+        if (guanliancompent) {
+            guanliancompent.defaultValue = guanliancompent.multiple? [] : ''
+            guanliancompent.dataOptions = []
+            let params = this.name
+            guanliancompent.getData({params: val})
         }
       }
     }

@@ -3,12 +3,15 @@
     <slot name="header"></slot>
     <el-table
       ref="table"
+      v-loading="loading"
       :data="realTableData"
+      :summary-method="getSummaries"
+      :show-summary="showSummary"
       border
       style="overflow:auto;margin-bottom: 20px;"
       :cell-style="bodyStyle"
       :header-cell-style="headerStyle"
-      @selection-change="handleCurrentChange"
+      @selection-change="pitchonChange"
     >
       <report-column
         v-for="(column, $index) in realTableColumns"
@@ -47,6 +50,16 @@ export default {
       },
       currentPage: {
         type: Number
+      },
+      loading: {
+        type: Boolean
+      },
+      showSummary: {
+        type: Boolean,
+        default: false
+      },
+      showSummArry: {
+        type: Array
       }
     },
     components: {
@@ -94,9 +107,36 @@ export default {
         console.log(`当前页: ${val}`);
         this.$emit('childmethods', 'methodCurrentChange', val);
       },
-      handleCurrentChange(val) {
+      pitchonChange(val) {
         this.multipleSelection = val;
         console.log(this.multipleSelection)
+      },
+      getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        columns.map((item,index) => {
+          if (index === 0) {
+            sums[index] = '总价';
+            return;
+          }
+          if (this.showSummArry.includes(index)) { 
+             const values = data.map(items => Number(items[item.property]));
+             if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+              sums[index] += ' 元';
+            } else {
+              sums[index] = 'N/A';
+            }
+          }
+        })
+         return sums;
       }
     }
   }

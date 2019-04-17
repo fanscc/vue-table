@@ -95,6 +95,13 @@ module.exports = {
   chainWebpack: config => {
     config.plugins.delete("preload");
     config.plugins.delete("prefetch");
+    config.plugin("define").tap(options => {
+      const pluginOptions = options[0];
+      pluginOptions["process.env"].ONLINE = JSON.stringify(
+        process.env.npm_config_env
+      );
+      return options;
+    });
     config.when(process.env.NODE_ENV === "development", config =>
       config.devtool("cheap-source-map")
     );

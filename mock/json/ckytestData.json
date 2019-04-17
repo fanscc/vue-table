@@ -11,6 +11,7 @@
         "noticeRole": "门店",
         "msgDetails": "您有一笔新的订单，请及时处理",
         "creationTime": "2018-09-09 09:00",
+        "money": 123,
         "creationMan": "张小花",
         "lastpushTime": "2018-09-09 09:01"
       },
@@ -19,6 +20,7 @@
         "noticeRole": "门店",
         "msgDetails": "您有一笔新的订单，请及时处理",
         "creationTime": "2018-09-09 09:00",
+        "money": 222,
         "creationMan": "张小花",
         "lastpushTime": "2018-09-09 09:01"
       },
@@ -27,6 +29,7 @@
         "noticeRole": "门店",
         "msgDetails": "您有一笔新的订单，请及时处理",
         "creationTime": "2018-09-09 09:00",
+        "money": 333,
         "creationMan": "张小花",
         "lastpushTime": "2018-09-09 09:01"
       }

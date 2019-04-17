@@ -11,6 +11,9 @@
       ref="tableConten"
       :realTableData="orderDetailVOList"
       :realTableColumns="ckytesttable.ckytestColumns"
+      :loading="loading"
+      :showSummary="showSummary"
+      :showSummArry="showSummArry"
       @childmethods="childmethods"
     ></tableElement>
   </div>
@@ -20,6 +23,7 @@
 import reportParams from "@/components/reportParams.vue";
 import tableElement from "@/components/tableElement.vue";
 import { ckytesttable } from "@/assets/tableData";
+import { setTimeout } from "timers";
 export default {
   name: "ckytable",
   data() {
@@ -28,15 +32,9 @@ export default {
       ckytesttable: ckytesttable,
       getDataPath: "/api-hxdgame/api/hxdgame/2220/v1/luckyDraw",
       pageNo: 1,
-      form: {
-        orderNo: "",
-        orgName: "",
-        startTime: "",
-        endTime: "",
-        status: 0,
-        supplierId: null,
-        transWay: 1 // 发货方式默认为“代发”
-      }
+      showSummary: true,
+      showSummArry: [6],
+      loading: false // 控制table是否显示loading的问题
     };
   },
   components: {
@@ -48,6 +46,7 @@ export default {
   },
   methods: {
     getDatas(pageNo = 1, val) {
+      this.loading = true;
       this.pageNo = pageNo;
       let params = {
         pageNo: pageNo,
@@ -60,12 +59,14 @@ export default {
       this.$http(this.getDataPath, params).then(res => {
         this.orderDetailVOList = res.data.data;
         console.log(res.data.data);
+        this.loading = false;
       });
     },
-    buttomChild(type, val) {
-      this[type] && this[type](val);
+    buttomChild(type, val, path) {
+      this[type] && this[type](val, path);
     },
     childmethods(type, val) {
+      debugger;
       if (type === "methodCurrentChange") {
         this.getDatas(val);
       } else {
@@ -77,31 +78,34 @@ export default {
         this[ntype] && this[ntype](params, type.event.url);
       }
     },
-    methodinquire(val) {
-      debugger;
-      let onflag = this.$refs.queryButton.efficacy();
-      console.log(onflag);
-      if (onflag) {
-        this.getDatas(1, val);
-      }
+    searchMethod(val) {
+      this.$refs.queryButton.efficacy().then(res => {
+        res && this.getDatas(1, val);
+      });
     },
-    methodexport(val) {
+    exportMethod(val, url) {
       // 导出如果没有勾选则导出查询内容
       let multipleSelection = this.$refs.tableConten.multipleSelection;
       console.log(multipleSelection, val);
       if (multipleSelection.length === 0) {
+        this.$message(url);
         alert(`导出查询条件为${JSON.stringify(val)}的数据`);
       } else {
         alert(`导出勾选的数据`);
       }
     },
-    methodrouter(val, url) {
+    routerMethod(val, url) {
       this.$router.push({ path: url, query: val });
     },
-    methoddelete(val, url) {
-      this.$http(url, val).then(res => {
-        console.log(res);
-        this.getDatas(this.pageNo);
+    deleteMethod(val) {
+      this.$confirm("确定要删除该节点吗？", "温馨提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        setTimeout(() => {
+          alert(`第${JSON.stringify(val)}条删除成功`);
+        }, 400);
       });
     }
   }

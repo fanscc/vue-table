@@ -23,7 +23,8 @@ export default {
       type: String
     },
     regulation: {
-      type: String
+      type: String,
+      default: ""
     },
     prop: {
       type: Array
@@ -47,7 +48,7 @@ export default {
     value: {
       handler(val) {
         this.defaultValue = val;
-        console.log(this.regulation);
+        console.log(this.value);
       },
       deep: true,
       immediate: true
