@@ -57,7 +57,7 @@
   "errorCode": 0,
   "errorMsg": null,
   "notEmpty": true,
-  "code": 200,
+  "code": 0,
   "unSuccess": false,
   "msg": null,
   "empty": false

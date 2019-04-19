@@ -1,4 +1,9 @@
 export const ckytesttable = {
+  getDataPath: "account/manage/find/list",
+  methods: "get",
+  static: { timeType: 1 },
+  showSummary: true, // 有没有合计栏
+  SummArryNameArry: ["accountId"],
   froms: {
     formRules: {
       // 配置效验规则
@@ -33,10 +38,11 @@ export const ckytesttable = {
         inputModel: "fsSelect",
         isHidden: false,
         name: "type",
-        path: "/cky/getSuppliersMap", // 下来框的请求接口
+        path: "/getSuppliersMap", // 下来框的请求接口
         placeholder: "请选择产品品牌",
         title: "产品子品牌",
         regulation: "type",
+        // dataname: "accountLevel", // 这个是因为有可能后台吧几个数据字典一起返回的这时候需要去选择
         defaultVal: "和昌", // 默认值
         paramsMaping: {
           // 吧后台返回的字段转成lable跟value
@@ -44,21 +50,21 @@ export const ckytesttable = {
           value: "supplierId"
         }
       },
-      {
-        inputModel: "fsSelect",
-        isHidden: false,
-        name: "type1",
-        parent: "type", // 是否有父级关联 对应父级的name值
-        path: "/cky/getSuppliersMap",
-        placeholder: "请选择产品品牌",
-        title: "产品子品牌2",
-        multiple: true, // 是否多选
-        value: [],
-        paramsMaping: {
-          label: "supplierName",
-          value: "supplierId"
-        }
-      },
+      // {
+      //   inputModel: "fsSelect",
+      //   isHidden: false,
+      //   name: "type1",
+      //   parent: "type", // 是否有父级关联 对应父级的name值
+      //   path: "/getSuppliersMap",
+      //   placeholder: "请选择产品品牌",
+      //   title: "产品子品牌2",
+      //   multiple: true, // 是否多选
+      //   value: [],
+      //   paramsMaping: {
+      //     label: "supplierName",
+      //     value: "supplierId"
+      //   }
+      // },
       {
         format: "yyyy-MM-dd", // 时间格式
         inputModel: "fsDatapicker",
@@ -72,7 +78,7 @@ export const ckytesttable = {
         format: "yyyy-MM-dd",
         inputModel: "fsdoubleDatePicker", // 开始时间至结束时间
         isHidde: false,
-        name: "doublequery",
+        name: "doublequery", // 代表需要跟后台交互的时候需要分割开成 createTimeStart，createTimeEnd
         placeholder: "请选择时间",
         title: "请选择时间",
         before: true, // 开始时间是结束时间算出来, after 结束时间是开始时间算出来
@@ -84,21 +90,23 @@ export const ckytesttable = {
       {
         style: "primary",
         type: "inquire",
+        typeName: "查询",
         event: {
-          path: "/form/customer/submit",
+          path: "account/manage/find/list",
           type: "search"
         }
       },
-      { style: "primary", type: "empty" },
+      { style: "primary", type: "empty", typeName: "清空" },
       {
         style: "primary",
         type: "export",
+        typeName: "导出",
         event: {
           path: "/form/customer/submit",
           type: "export"
         }
       },
-      { style: "primary", type: "hidden" }
+      { style: "primary", type: "hidden", typeName: "隐藏" }
     ]
   },
   ckytestColumns: [

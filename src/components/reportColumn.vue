@@ -30,7 +30,7 @@
     :align="align"
     :width="width"
     :type="type"
-    :formatter="formatterNumber"
+    :formatter="formatterMethods"
   >
   </el-table-column>
 
@@ -97,6 +97,9 @@ export default {
     },
     selectable: {
       type: String
+    },
+    formatterType: {
+      type: String
     }
   },
   data() {
@@ -114,10 +117,14 @@ export default {
     }
   },
   methods: {
-    formatterNumber(row, column) {
+    formatterMethods(row, column) {
+      if (this.formatterType) {
+        const Fn = Function;
+        return new Fn(`return ${this.formatterType}`)()(row);
+      }
       const nums = parseFloat(row[column.property] || 0).toFixed(2);
       const tostringNum = nums.toString().replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-      return "￥ " + tostringNum;
+      return `￥ ${tostringNum}`;
     },
     buttonShow(index, row, button) {
       if (button.isShow) {

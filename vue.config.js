@@ -1,7 +1,6 @@
 // Explanation of each configuration item You can find it in https://cli.vuejs.org/config/
 
 const path = require("path");
-
 function resolve(dir) {
   return path.join(__dirname, "./", dir);
 }
@@ -58,7 +57,7 @@ module.exports = {
     },
     proxy: {
       "/queryLuckyDrawData": proxyObj(goMock, url, "/login"),
-      "/luckyDraw": proxyObj(goMock, url, "/ckytestData"),
+      "/account": proxyObj(goMock, url, "/ckytestData"),
       "/order_code": proxyObj(goMock, url, "/delete"),
       "/getSuppliersMap": proxyObj(goMock, url, "/suppliersMap")
     }

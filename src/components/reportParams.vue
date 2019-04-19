@@ -31,7 +31,7 @@
               v-for="(item, index) in froms.buttons"
               :key="index"
               @click="onSubmit(item.type, item.event)"
-              >{{ item.type | fiterName }}</el-button
+              >{{ item.typeName }}</el-button
             >
           </el-col>
         </el-form-item>
@@ -65,21 +65,12 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
     props: {
       froms: {
         type: Object
+      },
+       searchData: {
+        type: Object  
       }
     },
     computed: {  
-    },
-    filters: {
-      fiterName(val) {
-         let objs = {
-          'inquire': '搜索',
-          'export': '导出',
-          'empty': '清空',
-          'hidden': '隐藏',
-          'showSearch': '显示查询条件'
-        }
-        return objs[val]
-      }
     },
     mounted() {
     },
@@ -87,12 +78,40 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
     },
     watch: {
       froms: {
-        handler(val) {
+        async handler(val) {
           let paramsClone = this.$utils.deepClone(this.froms.params)
-          paramsClone.map((item,index) => {
-            this.$set(this.valueClone, item.name, item.value)
-            console.log(this.valueClone)
-          })
+          await Promise.all(
+            paramsClone.map(async (item,index) => {
+                if (item.defaultVal) {
+                    // 代表着下拉框有默认值需要先请求接口                
+                    let res = await this.getDataSelect(item.path,item.staticParams) 
+                    if (item.dataname) {
+                        res = res[item.dataname]
+                    }
+                    if (item.paramsMaping) {
+                        debugger
+                        res.map((its,index) => {
+                            its['label'] = its[item.paramsMaping['label']]
+                            its['value'] = its[item.paramsMaping['value']]
+                        })        
+                    }
+                    res.map((ite,index) => {
+                        if (ite.label === item.defaultVal) {
+                            item.value = ite.value
+                        }
+                    })  
+                }
+                this.$set(this.valueClone, item.name, item.value)
+            })
+          )
+          this.$emit("getTableData", this.valueClone)
+        },
+        deep: true,
+        immediate: true
+      },
+      valueClone: {
+        handler(val) { 
+          this.searchData.params = val      
         },
         deep: true,
         immediate: true
@@ -104,6 +123,15 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
       getComponentName(item) {
         const componentName = item.inputModel
         return componentName
+      },
+      getDataSelect(path,val = {}) {
+        let endParams = Object.assign({}, val)
+        return new Promise((resolve, reject) => {
+            this.$http.get(path).then(res => {
+                debugger
+                resolve(res.model);
+            })            
+        })  
       },
       efficacy() {
         return new Promise((resolve, reject) => {
@@ -131,7 +159,7 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
           return
         }
         if (event) {
-          this.$emit('buttomChild', `${event.type}Method`, this.valueClone, event.path)
+          this.$emit('buttomChild', `${event.type}Method`, this.valueClone, event)
         }
       }
     }

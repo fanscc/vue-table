@@ -8,7 +8,7 @@
       :summary-method="getSummaries"
       :show-summary="showSummary"
       border
-      style="overflow:auto;margin-bottom: 20px;"
+      style="overflow:auto;margin-bottom: 40px;"
       :cell-style="bodyStyle"
       :header-cell-style="headerStyle"
       @selection-change="pitchonChange"
@@ -21,7 +21,7 @@
       ></report-column>
     </el-table>
     <el-pagination
-      style="text-align:right;"
+      style="text-align:right;padding-bottom: 20px;"
       background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -29,7 +29,7 @@
       :page-sizes="[20, 50, 100, 200]"
       :page-size="20"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
+      :total="total"
     >
     </el-pagination>
     <slot name="footer"></slot>
@@ -58,8 +58,11 @@ export default {
         type: Boolean,
         default: false
       },
-      showSummArry: {
+      SummArryNameArry: {
         type: Array
+      },
+      total: {
+        type: Number 
       }
     },
     components: {
@@ -101,15 +104,13 @@ export default {
     },
     methods: {
       handleSizeChange(val) {
-         console.log(`每页 ${val} 条`);
+        this.$emit('childmethods', 'methodSizeChange', val);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
         this.$emit('childmethods', 'methodCurrentChange', val);
       },
       pitchonChange(val) {
         this.multipleSelection = val;
-        console.log(this.multipleSelection)
       },
       getSummaries(param) {
         const { columns, data } = param;
@@ -119,7 +120,7 @@ export default {
             sums[index] = '总价';
             return;
           }
-          if (this.showSummArry.includes(index)) { 
+          if (this.SummArryNameArry.includes(item.property)) { 
              const values = data.map(items => Number(items[item.property]));
              if (!values.every(value => isNaN(value))) {
               sums[index] = values.reduce((prev, curr) => {

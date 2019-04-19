@@ -12,6 +12,11 @@ Vue.prototype.$utils = utils;
 Vue.config.productionTip = false;
 Vue.use(Element);
 Vue.prototype.$http = Axios;
+
+if (process.env.ONLINE) {
+  alert(1111);
+}
+
 // 添加一个请求拦截器
 Axios.interceptors.request.use(
   function(config) {
@@ -29,7 +34,7 @@ Axios.interceptors.response.use(
     /* eslint-disable no-undef */
     let { code } = res.data;
     debugger;
-    if (code !== 200) {
+    if (code !== 0) {
       // let msg = errorCode(subCode);
       //  msg && showToast(msg);
       console.log(res.data);

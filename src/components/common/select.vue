@@ -75,6 +75,9 @@
           return {}
         }
       },
+      dataname: {
+        type: String 
+      },
       paramsMaping: {
         type: Object,
         default() {
@@ -94,8 +97,7 @@
       return {
         defaultValue: this.multiple ? [] : '',
         loading: false,
-        dataOptions: [],
-        promiseResolve: null
+        dataOptions: []
       }
     },
     watch: {
@@ -113,15 +115,7 @@
       }
     },
     created() {
-      this.getData().then(res => {
-        if (this.defaultVal) {
-          this.dataOptions.map((item,index) => {
-            if (item.label === this.defaultVal) {
-              this.defaultValue = this.defaultVal
-            }
-          })
-        }
-      })
+      this.getData()
     },
     methods: {
       getData(val = {}) {
@@ -134,18 +128,21 @@
         console.log(endParams)
         return new Promise((resolve, reject) => {
           this.$http(this.path, endParams).then(res => {
-            this.promiseResolve = resolve;
-            this.dealData(res.model);
+            if (this.dataname) {
+              this.dealData(res.model[this.dataname]); 
+            } else {
+              this.dealData(res.model); 
+            }        
           })    
         })  
       },
       dealData(data) {
+        debugger
         data.map((item) => {
           item['label'] = item[this.paramsMaping['label']]
           item['value'] = item[this.paramsMaping['value']]
         })
         this.dataOptions = data
-        this.promiseResolve();
       },
       // 城市联动的更改父级的时候清空子级
       clearChild(val) {
