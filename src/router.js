@@ -8,8 +8,9 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home
+      name: "ckytable",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/ckytable.vue")
     },
     {
       path: "/about",

@@ -145,9 +145,11 @@ export default {
       // 导出如果没有勾选则导出查询内容
       const multipleSelection = this.$refs.tableConten.multipleSelection;
       if (multipleSelection.length === 0) {
-        this.$message(eventObj.path);
+        this.$message.warning("最少选择一条数据");
       } else {
-        this.$message("导出勾选的数据");
+        this.$message(
+          `${JSON.stringify(multipleSelection)} path:${eventObj.path}`
+        );
       }
     },
     // 启用按钮
@@ -183,13 +185,13 @@ export default {
     routerMethod(val, url) {
       this.$router.push({ path: url, query: val });
     },
-    deleteMethod() {
+    deleteMethod(params, url) {
       this.$confirm("确定要删除该节点吗？", "温馨提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        setTimeout(() => {}, 400);
+        this.$message(`${JSON.stringify(params)} path:${url}`);
       });
     }
   }
