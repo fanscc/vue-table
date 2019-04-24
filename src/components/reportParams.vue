@@ -77,7 +77,7 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
     beforeMount() {
     },
     watch: {
-      froms: {
+      'froms.params': {
         async handler(val) {
           let paramsClone = this.$utils.deepClone(this.froms.params)
           await Promise.all(
@@ -146,9 +146,9 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
           this.froms.buttons.map((item,index) => {
             if (item.type === type) {
               if (this.slideToggleDom) {
-                item.type = 'showSearch'
+                item.typeName = '显示查询条件'
               } else {
-                item.type = 'hidden'
+                item.typeName = '隐藏'
               }
             }
           })
