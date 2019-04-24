@@ -7,6 +7,7 @@ import Element from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 // import "lib-flexible/flexible";
 import * as utils from "@/untils/utils.js";
+
 Vue.prototype.$utils = utils;
 
 Vue.config.productionTip = false;

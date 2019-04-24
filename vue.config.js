@@ -4,7 +4,7 @@ const path = require("path");
 function resolve(dir) {
   return path.join(__dirname, "./", dir);
 }
-function proxyObj(goMock, url, Rewrite) {
+function proxyFun(goMock, url, Rewrite) {
   if (goMock) {
     return {
       target: "http://localhost:3002",
@@ -24,11 +24,17 @@ function proxyObj(goMock, url, Rewrite) {
 
 const url = "http://192.168.16.120:8080"; // 柯涛
 // 是否开启mock
-let goMock = true;
+// 用来判断是什么环境mock环境测走mock数据
+const Environment = process.env.environment;
 
-if (goMock) {
-  require("./mock");
-}
+let mockEnv = Environment == "mock";
+console.log(Environment);
+let proxyObj = {
+  "/queryLuckyDrawData": proxyFun(mockEnv, url, "/login"),
+  "/account": proxyFun(mockEnv, url, "/ckytestData"),
+  "/order_code": proxyFun(mockEnv, url, "/delete"),
+  "/getSuppliersMap": proxyFun(mockEnv, url, "/suppliersMap")
+};
 
 module.exports = {
   /**
@@ -55,12 +61,8 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    proxy: {
-      "/queryLuckyDrawData": proxyObj(goMock, url, "/login"),
-      "/account": proxyObj(goMock, url, "/ckytestData"),
-      "/order_code": proxyObj(goMock, url, "/delete"),
-      "/getSuppliersMap": proxyObj(goMock, url, "/suppliersMap")
-    }
+    proxy: proxyObj,
+    after: Environment == "mock" ? require("./mock/index.js") : () => {}
   },
 
   css: {
