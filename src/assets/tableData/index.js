@@ -82,7 +82,8 @@ export const ckytesttable = {
         placeholder: "请选择时间",
         title: "请选择时间",
         before: true, // 开始时间是结束时间算出来, after 结束时间是开始时间算出来
-        value: ["", "2019-4-4"] // 开始时间跟结束时间默认值
+        // value: ["", "2019-4-4"] // 开始时间跟结束时间默认值
+        timeLag: 2592000000 // before为true代表着起始时间小于当天的30天
       }
     ],
     buttons: [

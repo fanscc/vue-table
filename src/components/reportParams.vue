@@ -89,7 +89,6 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
                         res = res[item.dataname]
                     }
                     if (item.paramsMaping) {
-                        debugger
                         res.map((its,index) => {
                             its['label'] = its[item.paramsMaping['label']]
                             its['value'] = its[item.paramsMaping['value']]
@@ -101,6 +100,7 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
                         }
                     })  
                 }
+                this.timeCycle(item)
                 this.$set(this.valueClone, item.name, item.value)
             })
           )
@@ -128,7 +128,6 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
         let endParams = Object.assign({}, val)
         return new Promise((resolve, reject) => {
             this.$http.get(path).then(res => {
-                debugger
                 resolve(res.model);
             })            
         })  
@@ -139,6 +138,49 @@ import fsdoubleDatePicker from "./common/doubleDatePicker";
             resolve(valid)
           })
         })
+      },
+       timeCycle(item) {
+         if (item.value) return;
+         if (item.inputModel === 'fsdoubleDatePicker') {
+            // 双层时间控件
+              item.value = [];
+              const newTime = new Date();
+              const newfullTime =
+                `${newTime.getFullYear()
+                }/${
+                newTime.getMonth() + 1
+                }/${
+                newTime.getDate()}`;
+              if (item.after) {
+                const othernewTime = new Date(new Date().getTime()- 0 + item.timeLag)
+                item.value[0] = newfullTime;
+                item.value[1] =
+                  `${othernewTime.getFullYear()
+                  }/${
+                  othernewTime.getMonth() + 1
+                  }/${
+                  othernewTime.getDate()}`;
+              } else {
+                const othernewTime = new Date(new Date().getTime() - item.timeLag)
+                item.value[1] = newfullTime;
+                item.value[0] =
+                  `${othernewTime.getFullYear()
+                  }/${
+                  othernewTime.getMonth() + 1
+                  }/${
+                  othernewTime.getDate()}`;
+            }
+          }
+          if (item.inputModel === 'fsDatapicker') {
+              const newTime = new Date();
+              const newfullTime =
+                `${newTime.getFullYear()
+                }/${
+                newTime.getMonth() + 1
+                }/${
+                newTime.getDate()}`;
+                item.value = newfullTime
+          }
       },
       onSubmit(type,event) {
         if (type === 'hidden' || type === 'showSearch') {

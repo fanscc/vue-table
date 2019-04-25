@@ -87,37 +87,7 @@ export default {
       defaultValue: ["", ""]
     };
   },
-  created() {
-    if (!this.value) {
-      let newTime = new Date();
-      let newfullTime =
-        newTime.getFullYear() +
-        "/" +
-        (newTime.getMonth() + 1) +
-        "/" +
-        newTime.getDate();
-      console.log(newfullTime);
-      if (this.after) {
-        this.defaultValue[0] = newfullTime;
-        this.defaultValue[1] =
-          newTime.getFullYear() +
-          "/" +
-          newTime.getMonth() +
-          2 +
-          "/" +
-          newTime.getDate();
-      }
-      if (this.before) {
-        this.defaultValue[1] = newfullTime;
-        this.defaultValue[0] =
-          newTime.getFullYear() +
-          "/" +
-          newTime.getMonth() +
-          "/" +
-          newTime.getDate();
-      }
-    }
-  },
+  created() {},
   mounted() {},
   computed: {
     dateType() {
